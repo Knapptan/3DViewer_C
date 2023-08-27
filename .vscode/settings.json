@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "viewer.h": "c",
+        "random": "c"
+    }
+}

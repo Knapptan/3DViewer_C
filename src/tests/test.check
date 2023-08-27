@@ -1,0 +1,460 @@
+#include <stdio.h>
+#include <math.h>
+#include "back/viewer_back.h"
+
+#define EPS 1e-07
+
+
+#test parser_1 
+  data d = {0};
+  char filename[] = "obj_files/xxx.obj";
+  int res = parser(filename, &d);
+  ck_assert_int_eq(res, 1);
+
+
+#test parser_2 
+  data d = {0};
+  char *filename = NULL;
+  int res = parser(filename, &d);
+  ck_assert_int_eq(res, 1);
+
+
+#test affine_rotate_x_1 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, 0.0000000,  0.0000000, 1.0000000, 1.7320508,
+      0.0000000, 1.7320508, -1.0000000, 0.0000000, 2.7320508, 0.7320508,
+      2.0000000, 0.0000000, 0.0000000,  2.0000000, 1.0000000, 1.7320508,
+      2.0000000, 1.7320508, -1.0000000, 2.0000000, 2.7320508, 0.7320508};
+  parser(filename, &d);
+  rotate_x(&d, 30);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_x_2 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, 0.0000000, 0.0000000, -1.0000000, 1.7320508,
+      0.0000000, 1.7320508, 1.0000000, 0.0000000, 0.7320508,  2.7320508,
+      2.0000000, 0.0000000, 0.0000000, 2.0000000, -1.0000000, 1.7320508,
+      2.0000000, 1.7320508, 1.0000000, 2.0000000, 0.7320508,  2.7320508};
+  parser(filename, &d);
+  rotate_x(&d, -30);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_x_3 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, -0.0000000, 0.0000000, 0.0000000, -0.6840403, -1.8793852,
+      0.0000000, -1.8793852, 0.6840403, 0.0000000, -2.5634255, -1.1953450,
+      2.0000000, -0.0000000, 0.0000000, 2.0000000, -0.6840403, -1.8793852,
+      2.0000000, -1.8793852, 0.6840403, 2.0000000, -2.5634255, -1.1953450};
+  parser(filename, &d);
+  rotate_x(&d, 2000000);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_y_1 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, 0.0000000,  1.0000000, 0.0000000, 1.7320508,
+      0.0000000, 2.0000000, 0.0000000,  1.0000000, 2.0000000, 1.7320508,
+      1.7320508, 0.0000000, -1.0000000, 2.7320508, 0.0000000, 0.7320508,
+      1.7320508, 2.0000000, -1.0000000, 2.7320508, 2.0000000, 0.7320508};
+  parser(filename, &d);
+  rotate_y(&d, 30);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_y_2 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, 0.0000000, -1.0000000, 0.0000000, 1.7320508,
+      0.0000000, 2.0000000, 0.0000000, -1.0000000, 2.0000000, 1.7320508,
+      1.7320508, 0.0000000, 1.0000000, 0.7320508,  0.0000000, 2.7320508,
+      1.7320508, 2.0000000, 1.0000000, 0.7320508,  2.0000000, 2.7320508};
+  parser(filename, &d);
+  rotate_y(&d, -30);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_y_3 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      -0.0000000, 0.0000000, 0.0000000, -0.6840403, 0.0000000, -1.8793852,
+      -0.0000000, 2.0000000, 0.0000000, -0.6840403, 2.0000000, -1.8793852,
+      -1.8793852, 0.0000000, 0.6840403, -2.5634255, 0.0000000, -1.1953450,
+      -1.8793852, 2.0000000, 0.6840403, -2.5634255, 2.0000000, -1.1953450};
+  parser(filename, &d);
+  rotate_y(&d, 2000000);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_z_1 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000,  0.0000000, 0.0000000, 0.0000000,  2.0000000,
+      1.0000000, 1.7320508,  0.0000000, 1.0000000, 1.7320508,  2.0000000,
+      1.7320508, -1.0000000, 0.0000000, 1.7320508, -1.0000000, 2.0000000,
+      2.7320508, 0.7320508,  0.0000000, 2.7320508, 0.7320508,  2.0000000};
+  parser(filename, &d);
+  rotate_z(&d, 30);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_z_2 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000,  0.0000000, 0.0000000, 0.0000000,  0.0000000, 2.0000000,
+      -1.0000000, 1.7320508, 0.0000000, -1.0000000, 1.7320508, 2.0000000,
+      1.7320508,  1.0000000, 0.0000000, 1.7320508,  1.0000000, 2.0000000,
+      0.7320508,  2.7320508, 0.0000000, 0.7320508,  2.7320508, 2.0000000};
+  parser(filename, &d);
+  rotate_z(&d, -30);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_rotate_z_3 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      -0.0000000, 0.0000000,  0.0000000, -0.0000000, 0.0000000,  2.0000000,
+      -0.6840403, -1.8793852, 0.0000000, -0.6840403, -1.8793852, 2.0000000,
+      -1.8793852, 0.6840403,  0.0000000, -1.8793852, 0.6840403,  2.0000000,
+      -2.5634255, -1.1953450, 0.0000000, -2.5634255, -1.1953450, 2.0000000};
+  parser(filename, &d);
+  rotate_z(&d, 2000000);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_change_scale_1 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 6.0000000,
+      0.0000000, 6.0000000, 0.0000000, 0.0000000, 6.0000000, 6.0000000,
+      6.0000000, 0.0000000, 0.0000000, 6.0000000, 0.0000000, 6.0000000,
+      6.0000000, 6.0000000, 0.0000000, 6.0000000, 6.0000000, 6.0000000};
+  parser(filename, &d);
+  change_scale(&d, 3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_change_scale_2 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.6000000,
+      0.0000000, 0.6000000, 0.0000000, 0.0000000, 0.6000000, 0.6000000,
+      0.6000000, 0.0000000, 0.0000000, 0.6000000, 0.0000000, 0.6000000,
+      0.6000000, 0.6000000, 0.0000000, 0.6000000, 0.6000000, 0.6000000};
+  parser(filename, &d);
+  change_scale(&d, 0.3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_change_scale_3 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000,      0.0000000,      0.0000000,      0.0000000,
+      0.0000000,      666666.0000000, 0.0000000,      666666.0000000,
+      0.0000000,      0.0000000,      666666.0000000, 666666.0000000,
+      666666.0000000, 0.0000000,      0.0000000,      666666.0000000,
+      0.0000000,      666666.0000000, 666666.0000000, 666666.0000000,
+      0.0000000,      666666.0000000, 666666.0000000, 666666.0000000};
+  parser(filename, &d);
+  change_scale(&d, 333333);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_X_1 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      3.0000000, 0.0000000, 0.0000000, 3.0000000, 0.0000000, 2.0000000,
+      3.0000000, 2.0000000, 0.0000000, 3.0000000, 2.0000000, 2.0000000,
+      5.0000000, 0.0000000, 0.0000000, 5.0000000, 0.0000000, 2.0000000,
+      5.0000000, 2.0000000, 0.0000000, 5.0000000, 2.0000000, 2.0000000};
+  parser(filename, &d);
+  move_X(&d, 3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_X_2 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      -3.0000000, 0.0000000, 0.0000000, -3.0000000, 0.0000000, 2.0000000,
+      -3.0000000, 2.0000000, 0.0000000, -3.0000000, 2.0000000, 2.0000000,
+      -1.0000000, 0.0000000, 0.0000000, -1.0000000, 0.0000000, 2.0000000,
+      -1.0000000, 2.0000000, 0.0000000, -1.0000000, 2.0000000, 2.0000000};
+  parser(filename, &d);
+  move_X(&d, -3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_X_3 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      -0.5000000, 0.0000000, 0.0000000, -0.5000000, 0.0000000, 2.0000000,
+      -0.5000000, 2.0000000, 0.0000000, -0.5000000, 2.0000000, 2.0000000,
+      1.5000000,  0.0000000, 0.0000000, 1.5000000,  0.0000000, 2.0000000,
+      1.5000000,  2.0000000, 0.0000000, 1.5000000,  2.0000000, 2.0000000};
+  parser(filename, &d);
+  move_X(&d, -0.5);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_Y_1 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 3.0000000, 0.0000000, 0.0000000, 3.0000000, 2.0000000,
+      0.0000000, 5.0000000, 0.0000000, 0.0000000, 5.0000000, 2.0000000,
+      2.0000000, 3.0000000, 0.0000000, 2.0000000, 3.0000000, 2.0000000,
+      2.0000000, 5.0000000, 0.0000000, 2.0000000, 5.0000000, 2.0000000};
+  parser(filename, &d);
+  move_Y(&d, 3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_Y_2 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, -3.0000000, 0.0000000, 0.0000000, -3.0000000, 2.0000000,
+      0.0000000, -1.0000000, 0.0000000, 0.0000000, -1.0000000, 2.0000000,
+      2.0000000, -3.0000000, 0.0000000, 2.0000000, -3.0000000, 2.0000000,
+      2.0000000, -1.0000000, 0.0000000, 2.0000000, -1.0000000, 2.0000000};
+  parser(filename, &d);
+  move_Y(&d, -3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_Y_3 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, -0.5000000, 0.0000000, 0.0000000, -0.5000000, 2.0000000,
+      0.0000000, 1.5000000,  0.0000000, 0.0000000, 1.5000000,  2.0000000,
+      2.0000000, -0.5000000, 0.0000000, 2.0000000, -0.5000000, 2.0000000,
+      2.0000000, 1.5000000,  0.0000000, 2.0000000, 1.5000000,  2.0000000};
+  parser(filename, &d);
+  move_Y(&d, -0.5);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_Z_1 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, 3.0000000, 0.0000000, 0.0000000, 5.0000000,
+      0.0000000, 2.0000000, 3.0000000, 0.0000000, 2.0000000, 5.0000000,
+      2.0000000, 0.0000000, 3.0000000, 2.0000000, 0.0000000, 5.0000000,
+      2.0000000, 2.0000000, 3.0000000, 2.0000000, 2.0000000, 5.0000000};
+  parser(filename, &d);
+  move_Z(&d, 3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_Z_2 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, -3.0000000, 0.0000000, 0.0000000, -1.0000000,
+      0.0000000, 2.0000000, -3.0000000, 0.0000000, 2.0000000, -1.0000000,
+      2.0000000, 0.0000000, -3.0000000, 2.0000000, 0.0000000, -1.0000000,
+      2.0000000, 2.0000000, -3.0000000, 2.0000000, 2.0000000, -1.0000000};
+  parser(filename, &d);
+  move_Z(&d, -3);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
+
+
+#test affine_move_Z_3 
+  data d = {0};
+  char filename[] = "obj_files/cube.obj";
+  double vertexes_arr[] = {
+      0.0000000, 0.0000000, -0.5000000, 0.0000000, 0.0000000, 1.5000000,
+      0.0000000, 2.0000000, -0.5000000, 0.0000000, 2.0000000, 1.5000000,
+      2.0000000, 0.0000000, -0.5000000, 2.0000000, 0.0000000, 1.5000000,
+      2.0000000, 2.0000000, -0.5000000, 2.0000000, 2.0000000, 1.5000000};
+  parser(filename, &d);
+  move_Z(&d, -0.5);
+  ck_assert_int_eq(d.count_facets, 30);
+  ck_assert_int_eq(d.count_vertexes, 8);
+
+  int i = 0;
+  while (i < (int)d.count_vertexes * 3 ){
+    ck_assert_double_eq_tol(d.vertexes_arr[i], vertexes_arr[i], EPS);
+    i++;
+  }
+  free_object(&d);
